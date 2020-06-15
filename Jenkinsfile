@@ -4,7 +4,8 @@ node { /* .. snip .. */
 	def location = 'westus2'
 	def RgName = 'CPNetNonProd001'
 	def az_login = 'Azure-SP'
-
+	def AZURE_DEPLOYMENT_TEMPLATE_FILE: 'deployment.json'
+	def AZURE_DEPLOYMENT_PARAMETERS: 'deployment.parameters.json'
 
 	stage('Clone GitHub repository') {
         /* Let's make sure we have the repository cloned to our workspace */
@@ -21,11 +22,17 @@ node { /* .. snip .. */
 	
 	
 	RgName = 'CPMgmtNonProd001'
+	AZURE_DEPLOYMENT_TEMPLATE_FILE: '/var/lib/jenkins/workspace/CICD-Azure/cpmgmt/template.json'
+	AZURE_DEPLOYMENT_PARAMETERS: '/var/lib/jenkins/workspace/CICD-Azure/cpmgmt/parameters.json'
+	
 	
 	
 	stage('Deploy Azure Management'){
-		azureCLI commands: [[script: "az group create -n ${RgName} --location ${location}"]], principalCredentialId: 'Azure-SP'
-		azureCLI commands: [[script: "az deployment group create --resource-group ${RgName} --name cpmgmtwest --template-file '/var/lib/jenkins/workspace/CICD-Azure/template-cpmgmt.json' --parameters '{"location": {"value": "westus2"},"cloudGuardVersion": {"value": "R80.30 - Bring Your Own License"},"adminPassword": {"value": "T5zy9AJnjwej"},"authenticationType": {"value": "password"},"vmName": {"value": "cpmgmt01"}}']], principalCredentialId: 'Azure-SP'
+		withCredentials([azureServicePrincipal('Azure-SP')]) {
+			sh 'az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID'
+			sh "az group create --name $RgName --location $location"
+			sh "az deployment group create --resource-group $RgName --name cpmgmtwest --template-file $AZURE_DEPLOYMENT_TEMPLATE_FILE --parameters $AZURE_DEPLOYMENT_PARAMETERS"
+		}
 	}
 	
 }
