@@ -1,0 +1,35 @@
+job('AzCommand') {
+  steps {
+        azCommands('servicePrincipalId', 
+                        ['az vm create -n MyLinuxVM -g MyResourceGroup --image UbuntuLTS --data-disk-sizes-gb 10 20 && /publicIpAddress|PUBLIC_IP'])
+    }
+}
+
+
+
+
+
+
+
+azureCLI commands: [[exportVariablesString: '', script: 'az group create -n MyResourceGroup --location northeurope'], [exportVariablesString: '/publicIpAddress|PUBLIC_IP', script: 'az vm create -n ${VM_NAME} -g MyResourceGroup --image UbuntuLTS --data-disk-sizes-gb 10 20']], principalCredentialId: '<credential_id>'
+
+
+
+
+
+az deployment group create --resource-group ${RgName} --name cpmgmtwest --template-file .\cpmgmt\template.json --parameters .\cpmgmt\parameters.json
+
+-name cpmgmtwest -ResourceGroupName $resourcegroup -TemplateFile .\cpmgmt\template.json -TemplateParameterFile .\cpmgmt\parameters.json
+
+
+
+
+
+
+
+
+az network vnet create --name 'SecVnetUSWest' --resource-group ${RgName} --location ${location} --address-prefix '172.30.0.0/16' --subnet-name 'VMSS-Inspect' --subnet-prefix '172.30.100.0/24'
+az network vnet subnet create --address-prefix '172.30.244.0/24' --name 'Management' --resource-group ${RgName} --vnet-name 'SecVnetUSWest'
+
+$mgsubnet = New-AzureRmVirtualNetworkSubnetConfig -Name 'Management' -AddressPrefix '172.30.244.0/24'
+$wlsubnet = New-AzureRmVirtualNetworkSubnetConfig -Name 'VMSS-WorkLoad' -AddressPrefix '172.30.220.0/24'
