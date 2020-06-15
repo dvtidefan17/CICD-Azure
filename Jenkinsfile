@@ -14,7 +14,7 @@ node { /* .. snip .. */
 	}
 	
 	
-	def RgName = 'CPMgmtNonProd001'
+	RgName = 'CPMgmtNonProd001'
 	
 	
 	stage('Deploy Azure Management'){
