@@ -19,7 +19,7 @@ node { /* .. snip .. */
 	
 	stage('Deploy Azure Management'){
 		azureCLI commands: [[script: "az group create -n ${RgName} --location ${location}"]], principalCredentialId: 'Azure-SP'
-		azureCLI commands: [[script: "az deployment group create --resource-group ${RgName} --name cpmgmtwest --template-file 'template-cpmgmt.json' --parameters 'parameters-cpmgmt.json'"]], principalCredentialId: 'Azure-SP'
+		azureCLI commands: [[script: "az deployment group create --resource-group ${RgName} --name cpmgmtwest --template-file 'workspace/CICD-Azure/template-cpmgmt.json' --parameters 'workspace/CICD-Azure/parameters-cpmgmt.json'"]], principalCredentialId: 'Azure-SP'
 	}
 	
 }
