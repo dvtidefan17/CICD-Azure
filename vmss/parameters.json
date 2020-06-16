@@ -1,0 +1,101 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "westus2"
+        },
+        "authenticationType": {
+            "value": "password"
+        },
+        "adminPassword": {
+            "value": "T5zy9AJnjwej"
+        },
+        "upgrading": {
+            "value": "no"
+        },
+        "vmName": {
+            "value": "cpGatewayUSNonProd"
+        },
+        "instanceCount": {
+            "value": "2"
+        },
+        "maxInstanceCount": {
+            "value": "4"
+        },
+        "managementServer": {
+            "value": "my-management"
+        },
+        "configurationTemplate": {
+            "value": "azure-template"
+        },
+        "adminEmail": {
+            "value": "dan.varner@followyourheartfoundation.org"
+        },
+        "deploymentMode": {
+            "value": "Standard"
+        },
+        "instanceLevelPublicIP": {
+            "value": "no"
+        },
+        "mgmtInterfaceOpt2": {
+            "value": "eth1-private"
+        },
+        "appLoadDistribution": {
+            "value": "Default"
+        },
+        "ilbLoadDistribution": {
+            "value": "Default"
+        },
+        "availabilityZonesNum": {
+            "value": 0
+        },
+        "cloudGuardVersion": {
+            "value": "R80.30 - Bring Your Own License"
+        },
+        "vmSize": {
+            "value": "Standard_D2_v2"
+        },
+        "sicKey": {
+            "value": "vpn123456789"
+        },
+        "allowDownloadFromUploadToCheckPoint": {
+            "value": "true"
+        },
+        "diskType": {
+            "value": "Standard_LRS"
+        },
+        "sourceImageVhdUri": {
+            "value": "noCustomUri"
+        },
+        "virtualNetworkName": {
+            "value": "SecVnetUSWest"
+        },
+        "virtualNetworkAddressPrefixes": {
+            "value": [
+                "172.30.0.0/16"
+            ]
+        },
+        "vnetNewOrExisting": {
+            "value": "existing"
+        },
+        "virtualNetworkExistingRGName": {
+            "value": "CPNetNonProd001"
+        },
+        "subnet1Name": {
+            "value": "VMSS-Inspect"
+        },
+        "subnet1Prefix": {
+            "value": "172.30.100.0/24"
+        },
+        "subnet2Name": {
+            "value": "VMSS-BackEnd"
+        },
+        "subnet2Prefix": {
+            "value": "172.30.200.0/24"
+        },
+        "subnet2StartAddress": {
+            "value": "172.30.200.4"
+        }
+    }
+}
