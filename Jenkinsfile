@@ -1,4 +1,7 @@
-node { /* .. snip .. */
+node { /* 
+		Piplene script to provision all Azure resources 
+		for demo of scale sets */
+		
 	//Define all variables
 	
 	def location = 'westus2'
@@ -23,7 +26,6 @@ node { /* .. snip .. */
 		}
 	}
 	
-	
 	RgName = 'CPMgmtNonProd001'
 	AZURE_DEPLOYMENT_TEMPLATE_FILE: '/var/lib/jenkins/workspace/CICD-Azure/cpmgmt/template.json'
 	AZURE_DEPLOYMENT_PARAMETERS: '/var/lib/jenkins/workspace/CICD-Azure/cpmgmt/parameters.json'
@@ -36,4 +38,27 @@ node { /* .. snip .. */
 		}
 	}
 	
+	RgName = 'SecurityNonProdGatewayRG'
+	AZURE_DEPLOYMENT_TEMPLATE_FILE: '/var/lib/jenkins/workspace/CICD-Azure/vmss/template.json'
+	AZURE_DEPLOYMENT_PARAMETERS: '/var/lib/jenkins/workspace/CICD-Azure/vmss/parameters.json'
+	
+	stage('Deploy Azure Scale Set'){
+		withCredentials([azureServicePrincipal('Azure-SP')]) {
+			sh 'az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID'
+			sh "az group create --name $RgName --location $location"
+			sh "az deployment group create --resource-group $RgName --name cpgwwest --template-file $AZURE_DEPLOYMENT_TEMPLATE_FILE --parameters $AZURE_DEPLOYMENT_PARAMETERS"
+		}
+	}
+	
+	RgName = 'NonProdWorkLoad'
+	AZURE_DEPLOYMENT_TEMPLATE_FILE: '/var/lib/jenkins/workspace/CICD-Azure/ubuntu/template.json'
+	AZURE_DEPLOYMENT_PARAMETERS: '/var/lib/jenkins/workspace/CICD-Azure/ubuntu/parameters.json'
+	
+	stage('Deploy Azure Ubuntu Workload'){
+		withCredentials([azureServicePrincipal('Azure-SP')]) {
+			sh 'az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET -t $AZURE_TENANT_ID'
+			sh "az group create --name $RgName --location $location"
+			sh "az deployment group create --resource-group $RgName --name cpwloadwest --template-file $AZURE_DEPLOYMENT_TEMPLATE_FILE --parameters $AZURE_DEPLOYMENT_PARAMETERS"
+		}
+	}
 }
